@@ -1,0 +1,19 @@
+{
+  "name": "@geoloniamaps/sprite-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "sprite-one -i./icons -r1 -r2 ./_site/sprite",
+    "start": "npm run build && npx http-server ./_site"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@unvt/sprite-one": "^0.1.1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
