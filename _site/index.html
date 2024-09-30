@@ -11,22 +11,40 @@
     </style>
   </head>
   <body>
-    <main class="container">
-      <div class="px-4 py-5 my-5 text-center">
-        <h1 class="display-5 fw-bold text-body-emphasis">Geolonia アイコンセットのテンプレート</h1>
-        <div class="col-lg-6 mx-auto">
-          <p class="lead mb-4">
-            geoloniamaps/sprite-template で作成したアイコンセットのテンプレートです。
-          </p>
-        </div>
-      </div>
-      <div id="icon-table"></div>
-    </main>
+    <main class="container" id="main"></main>
     <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
     <script type="module">
       import htm from 'https://unpkg.com/htm?module';
       const html = htm.bind(React.createElement);
+
+      const Header = () => {
+        const spriteUrlBase = new URL('./sprite', window.location.href).href;
+        const variations = [ '.png', '.json', '@2x.png', '@2x.json' ];
+
+        return html`
+          <div className="px-4 py-5 mt-5 text-center">
+            <h1 className="display-5 fw-bold text-body-emphasis">Geolonia アイコンセットのテンプレート</h1>
+            <div className="col-lg-6 mx-auto">
+              <p className="lead mb-4">
+                geoloniamaps/sprite-template で作成したアイコンセットのテンプレートです。
+              </p>
+            </div>
+
+            <div>
+              <h2>スプライトシート</h2>
+              <ul className="list-unstyled">
+                ${variations.map((variation) => html`
+                  <li key="${variation}">
+                    <a href="${spriteUrlBase}${variation}" target="_blank">${spriteUrlBase}${variation}</a>
+                  </li>
+                `)}
+              </ul>
+            </div>
+          </div>
+        `;
+      }
+
       const IconTable = () => {
         const [icons, setIcons] = React.useState([]);
 
@@ -55,17 +73,17 @@
         }, []);
 
         return html`
-          <ul class="row row-cols-3 row-cols-sm-4 row-cols-lg-6 row-cols-xl-8 list-unstyled list">
+          <ul className="row row-cols-3 row-cols-sm-4 row-cols-lg-6 row-cols-xl-8 list-unstyled list">
             ${icons.map((icon) => html`
-              <li class="col mb-4">
-                <div class="px-3 py-4 mb-2 bg-body-secondary text-center rounded">
-                  <div class="d-inline-block sprite-icon" style=${{
+              <li className="col mb-4" key="${icon.name}">
+                <div className="px-3 py-4 mb-2 bg-body-secondary text-center rounded">
+                  <div className="d-inline-block sprite-icon" style=${{
                     width: `${icon.s1x.width}px`,
                     height: `${icon.s1x.height}px`,
                     backgroundPosition: `-${icon.s1x.x}px -${icon.s1x.y}px`,
                   }}></div>
                 </div>
-                <div class="name text-center pt-1">
+                <div className="name text-center pt-1">
                   <code><pre>${icon.name}</pre></code>
                 </div>
               </li>
@@ -73,7 +91,11 @@
           </ul>
         `;
       };
-      ReactDOM.render(html`<${IconTable} />`, document.getElementById('icon-table'));
+
+      ReactDOM.render(html`<${React.Fragment}>
+        <${Header} />
+        <${IconTable} />
+      </${React.Fragment}>`, document.getElementById('main'));
     </script>
   </body>
 </html>
